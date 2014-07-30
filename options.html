@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JSIT uploader - options</title>
+
+<style>
+
+	body{
+	margin:0;
+	font-family: arial;
+	}
+	#header {
+		background:black;
+		height:80px;
+		position:relative;
+		padding-left:90px;
+	}
+	#headertext {
+		position:absolute;
+		bottom:0;
+	}
+	#subheader {
+	height:30px;
+	background-color:rgb(51, 51, 51);
+	}
+	
+	#subheader a {
+	font-size: 14px;
+	color:rgb(133, 185, 2);
+	font-weight: bold;
+	line-height:30px;
+	text-decoration: none;
+	}
+	
+	a {
+	color:rgb(133, 185, 2);
+	font-weight: bold;
+	text-decoration: none;
+	}
+	
+	#subheader a:hover {
+	text-decoration: underline;
+	}
+	
+	a:hover {
+	text-decoration: underline;
+	}
+	
+	#content {
+	margin-left: 90px;
+	margin-top:20px;
+	}
+	
+	#detectedApiKey {
+	color:rgb(71, 181, 255);
+	}
+	
+		#detectedMail {
+	color:red;
+	}
+	
+	.buttons {
+	background-color: rgb(133, 185, 2);
+	border: 1px solid green;
+	color: white;
+	}
+</style>
+
+</head>
+
+<body>
+	<div id="header">
+		<div id="headertext">
+			<span style="color:rgb(133, 185, 2);font-size:40px;font-weight: bold;">justseed.it </span><span style="color:red;font-size:30px;font-weight: bold;">chrome uploader</span><span style="color: rgb(71, 181, 255);font-size: 20px;"> options</span>
+		</div>
+	</div>
+	<div id="subheader">
+	<a href="https://justseed.it/">< JSIT Home</a>
+	</div>
+	
+	
+	<div id="content">
+		<span style="color:rgb(133, 185, 2);font-weight: bold;">JSIT uploader</span> is a simple extension to upload hash/magnet/torrents to your justseed.it account.<br/><br/>
+		To do that you need to create an API key on your <a href="https://justseed.it/options/index.csp" target="_blank">Options</a> page and enter it here:<br/><br/>
+		
+		 <label>
+        <span>API Key : </span>
+        <input type="text" name="apikey_input" id="apikey_input" size="45" placeholder="your API key" style="color:rgb(71, 181, 255);font-family: arial;font-weight: bold;"></input>
+    </label> 
+	<input type="submit" value="Set" id="apikey_submit" class="buttons"/><br/>
+	
+	<p id="autodetect" style="display:none;">If you are <span id="detectedMail"></span>, your API key (<span id="detectedApiKey">5468465312564</span>) has been detected. <input type="submit" value="Use it." id="detectedKey_submit" class="buttons"/><br/></p>
+	
+	<p><img height="14" src="logo_16.png"/> buttons will be added to torrent and magnet links.</p>
+	<p><a href="http://forum.justseed.it/discussion/987/chrome-uploader" target="_blank">official thread</a></p>
+	</div>
+	
+	<script src="jsit_options.js"></script>
+</body>
+
+</html>
