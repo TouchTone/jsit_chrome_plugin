@@ -27,35 +27,25 @@ function dataURItoBlob(dataURI) {
   return blob;
 }
 
-
-	//from http://snipplr.com/view/14074/
- 
- String.prototype.between = function(prefix, suffix) {
-  s = this;
-  var i = s.indexOf(prefix);
-  if (i >= 0) {
-    s = s.substring(i + prefix.length);
-  }
-  else {
-    return '';
-  }
-  if (suffix) {
-    i = s.indexOf(suffix);
-    if (i >= 0) {
-      s = s.substring(0, i);
-    }
-    else {
-      return '';
-    }
-  }
-  return s;
-}
-
-
 // State Vars
 
 var api_key;
 chrome.storage.sync.get('apikey', function (result) { api_key = result.value; });
+
+var add_buttons;
+chrome.storage.sync.get('addbuttons', 
+function (result) 
+{ 
+    if (typeof result.value == "undefined")
+    {
+        add_buttons = true;
+    }
+    else
+    {
+        add_buttons = result.value; 
+    }
+});
+
 
 // Actions
 
@@ -90,23 +80,12 @@ function send_form(url, formData, sendResponse)
 
 function upload_url(url, torrent, sendResponse)
 {
-    if (typeof api_key == 'undefined' || api_key == "") //if no key is defined
+    if (typeof api_key == 'undefined' || api_key == "")
     {
-		var xmlhttp = new XMLHttpRequest(); //We try to autodetect the API key
-		xmlhttp.open("GET", "https://justseed.it/options/index.csp", false);
-		xmlhttp.send();
-		
-		if(xmlhttp.responseText.between('name="api_key" value="','" />') && confirm("You didn't set your API key, but we detected you are logged in. Use "+xmlhttp.responseText.between('font-weight: bold;">\n \n ',"&nbsp;<span")+"'s API key ?")){ //if an api key is detected AND  the user wants to use it
-			api_key = xmlhttp.responseText.between('name="api_key" value="','" />');
-			chrome.storage.sync.set({"apikey" : api_key }); //we set the new API key
-	   }
-	   else {
-					alert("Please set your api_key before trying to upload torrents!\n\nYou will be redirected to the option page.");
-					chrome.tabs.create({ url: chrome.extension.getURL("options.html") });
-					sendResponse("ignore");
-					return;
-	   }
-
+        alert("Please set your api_key before trying to upload torrents!\n\nYou will be redirected to the option page.");
+		chrome.tabs.create({ url: chrome.extension.getURL("options.html") });
+        sendResponse("ignore");
+        return;
     }
         
     var url_type = getURLType(url);
@@ -190,6 +169,15 @@ chrome.runtime.onMessage.addListener(
     {
         api_key = request.value;
         chrome.storage.sync.set({"apikey" : api_key });
+    }
+    else if (request.type == "getAddButtons")
+    {
+        sendResponse({addbuttons: add_buttons});
+    }
+    else if (request.type == "setAddButtons")
+    {
+        add_buttons = request.value;
+        chrome.storage.sync.set({"addbuttons" : add_buttons });
     }
     else if (request.type == "uploadURL")
     {
