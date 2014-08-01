@@ -1,7 +1,7 @@
 {
   "name": "JSIT Uploader",
   "description": "Upload selected magnet:/torrents to justseed.it",
-  "version": "0.3",
+  "version": "0.3.1",
   "permissions": [
     "contextMenus",
     "http://*/",

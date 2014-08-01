@@ -65,7 +65,6 @@ function sendURL(e)
 }
 
 
-var add_buttons = true;
 
 function do_add_buttons()
 {
@@ -89,16 +88,7 @@ function do_add_buttons()
         }
     }
 }
-
-chrome.runtime.sendMessage({type: "getAddButtons"}, function(response) 
-{
-    add_buttons = response.addbuttons;
-
-    if (add_buttons)
-    {
-        do_add_buttons();
-    }
-});
+do_add_buttons();
     
 
 chrome.runtime.onMessage.addListener(
