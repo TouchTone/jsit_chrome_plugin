@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ..
+zip -9r jsit_chrome_plugin.zip jsit_chrome_plugin -x "*.git*" "*make_zip" "*pptx" "*md" "*/screenshots"
+
+
