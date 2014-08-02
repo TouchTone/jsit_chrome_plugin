@@ -11,6 +11,7 @@ if (typeof String.prototype.endsWith != 'function') {
   };
 }
 
+http://torcache.net/torrent/04A8C73349E0FE148557C3A9BA8482E0AA67AD49.torrent?title=[kickass.to]captain.america.the.winter.soldier.2014.1080p.brrip.x264.yify
 
 // helper to check if a url is a torrent url
 
@@ -23,7 +24,9 @@ function getURLType(url)
                         "/torrents.php\\?action=download",
                         "/download.php\\?id=",
                         "/download.php/.*torrent",
-                        "/\\?page=download&tid="
+                        "/\\?page=download&tid=",
+                        "/torrent/[0-9a-fA-F]{40}.torrent.*",
+                        "/download/[0-9]*/[0-9a-fA-F]{40}$"                      
                     ];
                         
 
