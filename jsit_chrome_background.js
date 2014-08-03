@@ -55,7 +55,9 @@ function dataURItoBlob(dataURI) {
 // State Vars
 
 var api_key;
-chrome.storage.sync.get('apikey', function (result) { api_key = result.value; });
+chrome.storage.sync.get('apikey', function (result) { 
+    api_key = result.apikey; 
+});
 
 // Actions
 
