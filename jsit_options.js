@@ -79,4 +79,27 @@ xmlhttp.open("GET", "https://justseed.it/options/index.csp", true);
 xmlhttp.send();
 
 
+// Local patterns display
+ chrome.runtime.sendMessage({type: "getLocalPatterns"}, function(response) {
+        if (response.localpatterns.length > 0)
+        {
+            document.getElementById("localpatterns").style.display="block";
+            h = "<span style='font-weight: bold'>";
+            for(var i = 0; i < response.localpatterns.length; ++i)
+            {
+                h += response.localpatterns[i]
+
+                if (i == response.localpatterns.length - 2)
+                {
+                    h += "</span> and <span style='font-weight: bold'>";
+                }
+                else if (i < response.localpatterns.length - 1)
+                {
+                    h += "</span>, <span style='font-weight: bold'>";
+                }
+            }
+            h += "</span>";
+            document.getElementById("lpats").innerHTML = h;
+        }
+    });
 

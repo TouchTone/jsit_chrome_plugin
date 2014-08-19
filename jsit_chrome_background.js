@@ -55,8 +55,21 @@ function dataURItoBlob(dataURI) {
 // State Vars
 
 var api_key;
+var localpatterns = [];
+
 chrome.storage.sync.get('apikey', function (result) { 
     api_key = result.apikey; 
+});
+
+chrome.storage.sync.get('localpatterns', function (result) { 
+    if (result.localpatterns == undefined)
+    {
+        return;
+    }
+    
+    localpatterns = result.localpatterns; 
+    
+    url_patterns = url_patterns.concat(localpatterns);
 });
 
 // Actions
@@ -152,7 +165,14 @@ function upload(info, tab)
 {
     url = info.linkUrl;
 
-    upload_url(url, dummy);
+    var url_type = getURLType(url);
+
+    if (url_type == "No")
+    {
+        url = "torrent:" + url;
+    }
+    
+	chrome.tabs.sendMessage(tab.id, {type: "sendURL", url: url}); 
 }
 
 function readd(info, tab)
@@ -161,16 +181,164 @@ function readd(info, tab)
 }
 
 
+// Pattern learning
+
+var learnUrls = [];
+
+var part_types = { NUM : 0, HEX : 1, ALPHA : 2, ALNUM : 3, GENERAL : 4 };
+var part_res   = [ "[0-9]+", "[0-9A-Fa-f]+", "[A-Za-z]+", "[0-9A-Za-z]+", ".+" ];
+
+function url_tokenize(url)
+{
+    var parts = [];
+    var types = [];
+    var seps = [];
+
+    var a = document.createElement('a');
+    a.href = url;
+    
+    // Initialize with hostname
+    parts.push(a.hostname);
+    types.push(part_types.ALNUM);
+    seps.push('/');
+    
+    var b = (a.pathname + a.search).substring(1);
+    var bi = 0;
+    var p = b.split(/[/?=+]/);
+    
+    for (var i = 0; i < p.length; ++i)
+    {
+        var pi = p[i];
+        parts.push(pi);
+        bi += pi.length + 1;
+        
+        seps.push(b[bi - 1]);
+        
+        if (pi.match(/^[0-9]+$/))
+        {
+            types.push(part_types.NUM);
+        }
+        else if (pi.match(/^[0-9A-Fa-f]+$/))
+        {
+            types.push(part_types.HEX);
+        }
+        else if (pi.match(/^[A-Za-z]+$/))
+        {
+            types.push(part_types.ALPHA);
+        }
+        else if (pi.match(/^[0-9A-Za-z]+$/))
+        {
+            types.push(part_types.ALNUM);
+        }
+        else
+        {
+            types.push(part_types.GENERAL);
+        }
+    }
+    
+    return { "parts" : parts, "types" : types, "seps" : seps };
+}
+
+function learn(info, tab)
+{
+    url = info.linkUrl;
+    learnUrls.push(url);
+    
+    if (learnUrls.length < 2)
+    {        
+        return
+    }
+    console.log("Got learn urls:" + learnUrls);
+    
+    // Got enough, try to find pattern
+    var pp = [];
+    for (var i = 0; i < learnUrls.length ; i++)
+    {
+        pp.push(url_tokenize(learnUrls[i]));
+    }
+     
+    // Same host?
+    if (pp[0].parts[0] != pp[1].parts[0])
+    {
+        alert("Can't find pattern for different sites (" + pp[0].parts[0] + " vs. " + pp[1].parts[0] + "!");
+        return;
+    }
+    
+    // Same number of parts?
+    if (pp[0].parts.length != pp[1].parts.length)
+    {
+        alert("Found different number of parts (" + learnUrls[0] + "=" + pp[0].parts.length + " vs. " + pp[1].parts[0] + "=" + pp[1].parts.length + "!");
+        return;
+    }
+    
+    // Find common prefix
+    pref = "/"
+    for (var i = 1; i < pp[0].parts.length; i++)
+    {
+        if (pp[0].parts[i] == pp[1].parts[i])
+        {
+            pref += pp[0].parts[i];
+            
+            if (pp[0].seps[i] == pp[1].seps[i])
+            {
+                pref += pp[0].seps[i];
+            }
+            else
+            {
+                alert("Separators after part " + i + "(" + pp[0].parts[i] + ") are different: " + pp[0].seps[i] + " vs. " + pp[1].seps[i] + "!");
+                return;
+            }
+            continue;
+        }
+    
+        // Escape regex-relevant chars
+        pref = pref.replace('\\', '\\\\');
+        pref = pref.replace('.', '\\.');
+        pref = pref.replace('?', '\\?');
+       
+        // Add RE for first differing part
+        pref += part_res[Math.max(pp[0].types[i], pp[1].types[i])];
+        
+        // and abort, hopefully this is enough
+        break;
+    }
+    
+    if (url_patterns.indexOf(pref) > -1)
+    {
+        alert("Found pattern " + pref + "\nwhich already exists, ignored.");
+    }
+    else if (confirm("Found pattern " + pref + "\nDo you want to add it?") == true) 
+    {
+        localpatterns.push(pref);
+        chrome.storage.sync.set({"localpatterns" : localpatterns });
+        
+        url_patterns.push(pref);
+        chrome.tabs.sendMessage(tab.id, {type: "addPattern", pattern: pref}); 
+    }
+    
+    learnUrls = [];
+    
+    return;
+}
+
+
 // Initialization
 
 chrome.contextMenus.removeAll();
-chrome.contextMenus.create({
-        "id": "jsit",
-        "title": "Upload to JSIT", 
+// Almost never works... :( Need to look at again later.
+//cm_upload = chrome.contextMenus.create({
+//        "id": "jsit",
+//        "title": "Upload to JSIT", 
+//        "contexts": ["link"],
+//        "onclick": upload
+//});
+cm_learn = chrome.contextMenus.create({
+        "id": "jsit_learn",
+        "title": "Learn pattern", 
         "contexts": ["link"],
-        "onclick": upload
+        "onclick": learn
 });
-chrome.contextMenus.create({
+cm_readd = chrome.contextMenus.create({
         "id": "jsit_readd",
         "title": "Re-add buttons", 
         "contexts": ["page"],
@@ -201,4 +369,9 @@ chrome.runtime.onMessage.addListener(
             
         return true;
     }
+    else if (request.type == "getLocalPatterns")
+    {
+        sendResponse({"localpatterns": localpatterns});
+    }
+ 
   });
