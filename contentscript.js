@@ -25,13 +25,10 @@ function uploadResponse(target, response)
 
 function sendURL(e)
 {
-    l = e.target.parentElement.previousElementSibling;
-    url = l.href;
-
     logourl = chrome.extension.getURL("logo_16_pending.png");
     e.target.src = logourl;
 	
-	doSendURL(e.target, url);
+	doSendURL(e.target, e.target.parentNode.url);
 }
 
 function doSendURL(target, url)
@@ -48,9 +45,14 @@ function doSendURL(target, url)
 		
 		if (url.startsWith("torrent:"))
 		{
-			url = url.substring(8);
+			hurl = url.substring(8);
 		}
-        http.open(getURLMethod(url), url, true);
+        else
+        {
+            hurl = url;
+        }
+        
+        http.open(getURLMethod(hurl), hurl, true);
         http.responseType = 'blob';
         http.onreadystatechange = function() 
         {
@@ -96,11 +98,11 @@ function doSendURL(target, url)
      }
 }
 
-
 function do_add_buttons()
 {
     var links = document.getElementsByTagName('a');
 
+    // General pattern-match handler
     for(var i=0; i<links.length; i++) 
     {
         l = links[i];
@@ -108,17 +110,28 @@ function do_add_buttons()
 
         if (getURLType(url) != "No")
         {
-            var jsl = document.createElement("span");
-            jsl.setAttribute("class", "jsit");
-            logourl = chrome.extension.getURL("logo_16.png");
-            jsl.innerHTML = "<img src='" + logourl + "' title='Upload to JSIT'/>";
-
-            l.parentNode.insertBefore(jsl, l.nextSibling);
-
-            jsl.addEventListener("click", sendURL, false);
+            do_add_single_button(l, url);
         }
     }
+ }
+
+
+// Site-specific startup
+
+// TVTorrents.com
+// Need to run as injected code, needs access to scripts...
+if (document.URL.indexOf("tvtorrents.com") > -1)
+{
+    var script = document.createElement('script');
+    script.src = chrome.extension.getURL('injector.js');
+    script.onload = function() {
+        this.parentNode.removeChild(this);
+    };
+    (document.head||document.documentElement).appendChild(script);
 }
+
+
+// Generic startup 
 
 var have_localpatterns = false;
 if (have_localpatterns)
@@ -136,6 +149,9 @@ chrome.runtime.sendMessage({type: "getLocalPatterns"}, function (response)
         do_add_buttons();
     });
 
+////////////////////////////////////
+// Message handling
+// From extension
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     //console.log(sender.tab ?
@@ -144,6 +160,7 @@ chrome.runtime.onMessage.addListener(
     if (request.type == "readdButtons")
     {
         do_add_buttons();
+        window.postMessage({type: 'readdButtons'}, '*' /* targetOrigin: any */);
     }
     else if (request.type == "addPattern")
     {
@@ -161,5 +178,27 @@ chrome.runtime.onMessage.addListener(
     else if (request.type == "sendURL")
     {        
         doSendURL(undefined, request.url);
+    }
+    else
+    {
+        console.log("Got unknown message " + request);
+    }
+});
+
+// From injected scripts
+window.addEventListener('message', function(request) {
+    if (! request.data.hasOwnProperty("type"))
+    {
+        return;
+    }
+    
+    if (request.data.type == "addButton")
+    {
+        var elem = document.getElementById(request.data.id);
+        do_add_single_button(elem, request.data.url);
+    }
+    else
+    {
+        console.log("Got unknown message " + request.toString());
     }
 });
