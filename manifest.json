@@ -30,5 +30,5 @@
   }
   ],
   "options_page": "options.html",
-  "web_accessible_resources": [ "*.png", "options.html" ]
+  "web_accessible_resources": [ "*.png", "options.html", "jsit_tools.js", "injector.js" ]
 }
