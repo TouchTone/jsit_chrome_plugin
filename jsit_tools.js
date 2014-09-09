@@ -24,7 +24,8 @@ var url_patterns = [    "/download/file.php\\?id=",
                         "/\\?page=download&tid=",
                         "/torrent/[0-9a-fA-F]{40}.torrent.*",
                         "/download/[0-9]*/[0-9a-fA-F]{40}$",
-                        "/forum/dl\.php\?t=[0-9]+" 
+                        "/forum/dl\.php\?t=[0-9]+",
+                        "/attachments/.*-torrent\.[0-9]+/"
                     ];
 
 // Patterns for urls that match torrent url, but are not torrents (some trackers have funny page names)
@@ -85,4 +86,54 @@ function getURLMethod(url)
     }
     
     return "GET";
+}
+
+
+
+function do_add_single_button(l, url)
+{
+    var jsl = document.createElement("span");
+    jsl.setAttribute("class", "jsit");
+    logourl = chrome.extension.getURL("logo_16.png");
+    jsl.innerHTML = "<img src='" + logourl + "' title='Upload to JSIT'/>";
+
+    l.parentNode.insertBefore(jsl, l.nextSibling);
+    
+    // See if icon is outside of visible area, move it then if it is             
+    var lrect = l.getBoundingClientRect();
+    var prect = l.parentElement.getBoundingClientRect();
+    var jrect = jsl.getBoundingClientRect();
+
+    var st = "";
+    
+    // Is icon is outside of parent's visible area? Move it inside if it is             
+    var offset = jrect.left - prect.right + 17;
+    if (offset > 0)
+    {
+        st += "left: -" + offset + "px; ";
+    }
+   
+    var offset = jrect.top - prect.bottom + 17;
+    if (offset > 0)
+    {
+        st += "top: -" + offset + "px; ";
+    }
+
+    
+    // Are we far away from original link (maybe line break)? Adjust and move us close.
+    var maxdist = 10;
+    // Disabled for now, not working well.
+    if (0==1 && st == "" && (jrect.left > lrect.right + maxdist || jrect.right < lrect.left - maxdist ||
+                     jrect.top > lrect.bottom + maxdist || jrect.bottom < lrect.top - maxdist))
+    {
+        st = "position: absolute; left: " + (lrect.right - 17) + "; top: " + (lrect.bottom - 17) + ";";
+    }
+    
+    
+    if (st != "")
+    {
+        jsl.setAttribute("style", st);
+    }
+    jsl.addEventListener("click", sendURL, false);
+    jsl.url = url;
 }
