@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Make transparent
+cd logo
+for i in Slide*PNG
+do
+    convert -transparent "#0000ff" -fuzz 50% $i trans_$i
+done
+
+# Make logo sizes
+for i in 128 96 48 16
+do
+
+    convert -geometry ${i}x${i} trans_Slide1.PNG logo_$i.png
+
+done
+
+# Make special versions
+
+convert -geometry 16x16 trans_Slide2.PNG logo_16_success.png
+convert -geometry 16x16 trans_Slide3.PNG logo_16_failure.png
+
+convert -geometry 16x16 -gaussian-blur 1.2  trans_Slide1.PNG logo_16_pending.png
+
+cp logo*png ..
