@@ -11,8 +11,6 @@ if (typeof String.prototype.endsWith != 'function') {
   };
 }
 
-http://torcache.net/torrent/04A8C73349E0FE148557C3A9BA8482E0AA67AD49.torrent?title=[kickass.to]captain.america.the.winter.soldier.2014.1080p.brrip.x264.yify
-
 // helper to check if a url is a torrent url
 var url_patterns = [    "/download/file.php\\?id=",
                         "/download.php\\?torrent=",
@@ -95,9 +93,10 @@ function do_add_single_button(l, url)
     var jsl = document.createElement("span");
     jsl.setAttribute("class", "jsit");
     logourl = chrome.extension.getURL("logo_16.png");
-    jsl.innerHTML = "<img src='" + logourl + "' title='Upload to JSIT'/>";
+    jsl.innerHTML = "<img width='16' height='16' src='" + logourl + "' title='Upload to JSIT'/>";
 
     l.parentNode.insertBefore(jsl, l.nextSibling);
+    //l.className = l.className;
     
     // See if icon is outside of visible area, move it then if it is             
     var lrect = l.getBoundingClientRect();
