@@ -61,6 +61,7 @@ function doSendURL(target, url)
                 if (http.status != 200)
                 {
                     alert("Downloading torrent failed: " + http.status + "!");
+                    uploadResponse(target, "failure");
                 }
                 else
                 {
@@ -79,6 +80,7 @@ function doSendURL(target, url)
                             }
                         };                
                         reader.readAsText(http.response);                            
+                        uploadResponse(target, "failure");
                     }
                     else
                     {
