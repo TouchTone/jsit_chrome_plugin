@@ -105,7 +105,7 @@ function do_add_single_button(l, url)
 		logourl = chrome.extension.getURL("logo_16.png");
 	}
 	
-    jsl.innerHTML = "<img width='16' height='16' src='" + logourl + "' title='Upload to JSIT'/>";
+    jsl.innerHTML = "<img width='16' height='16' src='" + logourl + "' title='Upload " + url + " to JSIT'/>";
 
     l.parentNode.insertBefore(jsl, l.nextSibling);
     //l.className = l.className;
