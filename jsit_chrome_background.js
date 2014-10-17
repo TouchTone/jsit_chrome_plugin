@@ -175,11 +175,6 @@ function upload(info, tab)
 	chrome.tabs.sendMessage(tab.id, {type: "sendURL", url: url}); 
 }
 
-function readd(info, tab)
-{
-    chrome.tabs.sendMessage(tab.id, {type: "readdButtons"});
-}
-
 
 // Pattern learning
 
@@ -325,24 +320,34 @@ function learn(info, tab)
 // Initialization
 
 chrome.contextMenus.removeAll();
-// Almost never works... :( Need to look at again later.
-//cm_upload = chrome.contextMenus.create({
-//        "id": "jsit",
-//        "title": "Upload to JSIT", 
-//        "contexts": ["link"],
-//        "onclick": upload
-//});
+cm_upload = chrome.contextMenus.create({
+		"id": "jsit_upload",
+		"title": "Upload to JSIT", 
+		"contexts": ["link"]
+});
 cm_learn = chrome.contextMenus.create({
-        "id": "jsit_learn",
-        "title": "Learn pattern", 
-        "contexts": ["link"],
-        "onclick": learn
+		"id": "jsit_learn",
+		"title": "Learn pattern", 
+		"contexts": ["link"]
 });
 cm_readd = chrome.contextMenus.create({
-        "id": "jsit_readd",
-        "title": "Re-add buttons", 
-        "contexts": ["page"],
-        "onclick": readd
+		"id": "jsit_readd",
+		"title": "Re-add buttons", 
+		"contexts": ["page"]
+});
+
+chrome.contextMenus.onClicked.addListener(function(info, tab) {
+	switch(info.menuItemId) {
+		case "jsit_readd":
+			chrome.tabs.sendMessage(tab.id, {type: "readdButtons"});
+			break;
+		case "jsit_learn":
+			learn(info, tab);
+			break;
+		case "jsit_upload":
+			upload(info, tab);
+			break;
+	}
 });
 
 // Message listener

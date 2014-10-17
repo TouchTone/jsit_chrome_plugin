@@ -15,7 +15,7 @@
             "128": "logo_128.png" },  
   "background" : {
     "scripts" : [ "jsit_tools.js", "jsit_chrome_background.js" ],
-    "persistent" : true
+    "persistent" : false
   },
   "content_scripts": [
   {
