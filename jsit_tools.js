@@ -92,7 +92,19 @@ function do_add_single_button(l, url)
 {
     var jsl = document.createElement("span");
     jsl.setAttribute("class", "jsit");
-    logourl = chrome.extension.getURL("logo_16.png");
+	
+	var type = getURLType(url);
+	var logourl;
+	
+	if (type == "magnet")
+	{
+		logourl = chrome.extension.getURL("logo_16_magnet.png");
+	}
+	else
+	{
+		logourl = chrome.extension.getURL("logo_16.png");
+	}
+	
     jsl.innerHTML = "<img width='16' height='16' src='" + logourl + "' title='Upload to JSIT'/>";
 
     l.parentNode.insertBefore(jsl, l.nextSibling);

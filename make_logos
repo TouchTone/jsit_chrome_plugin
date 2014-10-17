@@ -17,8 +17,9 @@ done
 
 # Make special versions
 
-convert -geometry 16x16 trans_Slide2.PNG logo_16_success.png
-convert -geometry 16x16 trans_Slide3.PNG logo_16_failure.png
+convert -geometry 16x16 trans_Slide2.PNG logo_16_magnet.png
+convert -geometry 16x16 trans_Slide3.PNG logo_16_success.png
+convert -geometry 16x16 trans_Slide4.PNG logo_16_failure.png
 
 convert -geometry 16x16 -gaussian-blur 1.2  trans_Slide1.PNG logo_16_pending.png
 
