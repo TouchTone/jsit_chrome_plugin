@@ -1,103 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>JSIT uploader - options</title>
-
-<style>
-
-	body{
-	margin:0;
-	font-family: arial;
-	}
-	#header {
-		background:black;
-		height:80px;
-		position:relative;
-		padding-left:90px;
-	}
-	#headertext {
-		position:absolute;
-		bottom:0;
-	}
-	#subheader {
-	height:30px;
-	background-color:rgb(51, 51, 51);
-	}
-	
-	#subheader a {
-	font-size: 14px;
-	color:rgb(133, 185, 2);
-	font-weight: bold;
-	line-height:30px;
-	text-decoration: none;
-	}
-	
-	a {
-	color:rgb(133, 185, 2);
-	font-weight: bold;
-	text-decoration: none;
-	}
-	
-	#subheader a:hover {
-	text-decoration: underline;
-	}
-	
-	a:hover {
-	text-decoration: underline;
-	}
-	
-	#content {
-	margin-left: 90px;
-	margin-top:20px;
-	}
-	
-	#detectedApiKey {
-	color:rgb(71, 181, 255);
-	}
-	
-		#detectedMail {
-	color:red;
-	}
-	
-	.buttons {
-	background-color: rgb(133, 185, 2);
-	border: 1px solid green;
-	color: white;
-	}
-</style>
-
+	<title>JSIT Uploader Options</title>
+	<link rel="stylesheet" type="text/css" href="https://justseed.it/style.csp">
 </head>
 
-<body>
-	<div id="header">
-		<div id="headertext">
-			<span style="color:rgb(133, 185, 2);font-size:40px;font-weight: bold;">justseed.it </span><span style="color:red;font-size:30px;font-weight: bold;">chrome uploader</span><span style="color: rgb(71, 181, 255);font-size: 20px;"> options</span>
-		</div>
-	</div>
-	<div id="subheader">
-	<a href="https://justseed.it/">< JSIT Home</a>
-	</div>
-	
-	
+<body style="height: 100%; padding: 0px; margin: 0px;">
+	<table cellpadding="0" cellspacing="0" style="width: 100%;">
+		<tbody>
+			<tr>
+				<td style="padding-left: 5px; vertical-align: middle; border: none; background-color: #333333; color: white; height: 30px; font-size: 14px; font-weight: bold;">
+					<span style="color: white;">justseed.it</span><span style="color: #6ca5d0;">&nbsp;|&nbsp;</span><a href="https://justseed.it/index.csp" class="navigation">home</a><span style="color: #6ca5d0;">&nbsp;|&nbsp;</span><span style="color: white;">plugin</span>
+				</td>
+				<td style="white-space: nowrap; text-align: right; vertical-align: middle; border: none; padding-right: 5px; background-color: #333333; color: white; height: 30px; font-size: 14px; font-weight: bold;">
+					<a href="http://forum.justseed.it/discussion/987/chrome-uploader" target="_blank" class="navigation" style="color: white;">official thread</a><span style="color: #6ca5d0;">&nbsp;|&nbsp;</span><a href="https://github.com/TouchTone/jsit_chrome_plugin" target="_blank" class="navigation" style="color: white;">github</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 	<div id="content">
-		<span style="color:rgb(133, 185, 2);font-weight: bold;">JSIT uploader</span> is a simple extension to upload hash/magnet/torrents to your justseed.it account.<br/><br/>
-		To do that you need to create an API key on your <a href="https://justseed.it/options/index.csp" target="_blank">Options</a> page and enter it here:<br/><br/>
-		
-		 <label>
-        <span>API Key : </span>
-        <input type="text" name="apikey_input" id="apikey_input" size="45" placeholder="your API key" style="color:rgb(71, 181, 255);font-family: arial;font-weight: bold;"></input>
-    </label> 
-	<input type="submit" value="Set" id="apikey_submit" class="buttons"/><br/>
-	
-	<p id="autodetect" style="display:none;">If you are <span id="detectedMail"></span>, your API key (<span id="detectedApiKey"></span>) has been detected. <input type="submit" value="Use it." id="detectedKey_submit" class="buttons"/><br/></p>
-	
-	<p><img height="14" src="logo_16.png"/> buttons will be added to torrent and magnet links.</p>
-    	
-	<p id="localpatterns" style="display:none;">You defined the following local patterns: <span id="lpats"></span>. Please make them available to others in the <a href="http://forum.justseed.it/discussion/987/chrome-uploader">Official thread</a>.</p>
-   
-	<p><a href="http://forum.justseed.it/discussion/987/chrome-uploader" target="_blank">Official thread</a> - <a href="https://github.com/TouchTone/jsit_chrome_plugin" target="_blank">GitHub</a></p>
+		<table cellpadding="0" cellspacing="0" style="width: 100%;">
+			<tbody>
+				<tr>
+					<td style="width: 30%;"></td>
+					<td style="padding-top: 5px;">
+						<div class="line" style="width: 100%; margin-bottom: 3px;">
+							<table width="100%" cellpadding="0" cellspacing="0" style="padding-bottom: 2px;">
+								<tbody>
+									<tr>
+										<td style="padding-top: 0px; padding-bottom: 0px; font-weight: bold;">JSIT uploader options</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<strong>JSIT uploader</strong> is a simple extension to upload hash/magnet/torrents to your justseed.it account.<br/><br/>
+						To do that you need to create an API key on your <a href="https://justseed.it/options/index.csp" target="_blank">Options</a> page and enter it here:<br/><br/>
+				
+						<label>
+							<span>API Key </span>
+							<input type="text" name="apikey_input" id="apikey_input" size="45" placeholder="your API key"></input>
+						</label> 
+						<input type="submit" value="Set" id="apikey_submit" class="buttons"/><br/>
+					
+						<p id="autodetect" style="display:none;">If you are <span id="detectedMail" style="font-weight: bold;"></span>, your API key (<span id="detectedApiKey" style="color: #6ca5d0;"></span>) has been detected. <input type="submit" value="Use it." id="detectedKey_submit" class="buttons"/><br/></p>
+					
+						<p><img height="14" src="logo_16.png"/> buttons will be added to torrent and magnet links.</p>
+						
+						<p id="localpatterns" style="display:none;">You defined the following local patterns: <span id="lpats"></span>. Please make them available to others in the <a href="http://forum.justseed.it/discussion/987/chrome-uploader">Official thread</a>.</p>
+					</td>
+					<td style="width: 30%;"></td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
-	
 	<script src="jsit_options.js"></script>
 </body>
 

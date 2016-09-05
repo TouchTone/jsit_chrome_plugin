@@ -13,7 +13,12 @@
 		var newLink = document.createElement('a');
 		newLink.href=chrome.extension.getURL("options.html");
 		newLink.target="_blank"
-		newLink.innerHTML="Plugin"
+		newLink.className="navigation"
+		newLink.innerHTML="plugin"
 		utilitiesLink.parentNode.insertBefore(newLink, utilitiesLink);
-		utilitiesLink.parentNode.insertBefore(document.createElement('br'), utilitiesLink);
+
+		var newDivider = document.createElement('span');
+		newDivider.style.color="#6ca5d0";
+		newDivider.innerHTML="&nbsp;|&nbsp;";
+		utilitiesLink.parentNode.insertBefore(newDivider, utilitiesLink);
 	}
