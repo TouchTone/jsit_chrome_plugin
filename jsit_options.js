@@ -70,7 +70,7 @@ xmlhttp.onreadystatechange = function() {
 	   if(xmlhttp.status == 200 && xmlhttp.responseText.between('name="api_key" value="','" />')){
 			document.getElementById("autodetect").style.display="block";
 		   document.getElementById("detectedApiKey").innerHTML = xmlhttp.responseText.between('name="api_key" value="','" />');
-		  document.getElementById("detectedMail").innerHTML = xmlhttp.responseText.between('font-weight: bold;">\n \n ',"&nbsp;<span");
+		  document.getElementById("detectedMail").innerHTML = xmlhttp.responseText.between('span style="color: #c9c9c9;">','</span>&nbsp;<span');
 	   }
 	}
 }
