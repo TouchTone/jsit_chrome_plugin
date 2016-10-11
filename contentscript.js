@@ -1,11 +1,11 @@
 
 function uploadResponse(target, response)
 {
-	if (target === undefined)
-	{
-		return;
-	}
-	
+    if (target === undefined)
+    {
+        return;
+    }
+    
     if (response == "success")
     {
         logourl = chrome.extension.getURL("logo_16_success.png");
@@ -23,12 +23,26 @@ function uploadResponse(target, response)
     }
 }
 
+
+function mapTargetURL(url)
+{
+    if (url.startsWith("http://extratorrent.cc/torrent_download/"))
+    {
+        return url.replace("torrent_download", "download");
+    }
+    return url;
+}
+
 function sendURL(e)
 {
+    e.preventDefault();
+
     logourl = chrome.extension.getURL("logo_16_pending.png");
-    e.target.src = logourl;
-	
-	doSendURL(e.target, e.target.parentNode.url);
+    e.currentTarget.childNodes[0].src = logourl;
+    
+    var l = e.currentTarget.parentNode.getElementsByTagName("a");
+    
+    doSendURL(e.currentTarget.childNodes[0], mapTargetURL(l[0].href));
 }
 
 function doSendURL(target, url)
