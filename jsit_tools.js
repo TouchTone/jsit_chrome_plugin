@@ -27,7 +27,7 @@ var url_patterns = [    "/download/file.php\\?id=",
                     ];
 
 // Patterns for urls that match torrent url, but are not torrents (some trackers have funny page names)
-var exclude_patterns = [ "extratorrent\.cc/torrent_download/"
+var exclude_patterns = [ //"extratorrent\.cc/torrent_download/"
                        ];
 
 
@@ -67,10 +67,10 @@ function getURLType(url)
     }    
     else if (url.endsWith(".torrent") || findInREList(url, url_patterns))
     {
-		if (! findInREList(url, exclude_patterns))
-		{
-			type = "torrent";
-		}
+        if (! findInREList(url, exclude_patterns))
+        {
+            type = "torrent";
+        }
     }
      
     return type;
@@ -124,10 +124,10 @@ function do_add_single_button(l, url)
         st += "left: -" + offset + "px; ";
     }
    
-    var offset = jrect.top - prect.bottom + 17;
+    var offset = lrect.bottom - prect.bottom;
     if (offset > 0)
     {
-        st += "top: -" + offset + "px; ";
+        st += "top: " + offset + "px; ";
     }
 
     

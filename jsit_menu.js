@@ -13,12 +13,9 @@
 		var newLink = document.createElement('a');
 		newLink.href=chrome.extension.getURL("options.html");
 		newLink.target="_blank"
-		newLink.className="navigation"
-		newLink.innerHTML="plugin"
+		newLink.innerHTML="Uploader"
 		utilitiesLink.parentNode.insertBefore(newLink, utilitiesLink);
 
-		var newDivider = document.createElement('span');
-		newDivider.style.color="#6ca5d0";
-		newDivider.innerHTML="&nbsp;|&nbsp;";
-		utilitiesLink.parentNode.insertBefore(newDivider, utilitiesLink);
+		var newBreak = document.createElement('br');
+		utilitiesLink.parentNode.insertBefore(newBreak, utilitiesLink);
 	}
