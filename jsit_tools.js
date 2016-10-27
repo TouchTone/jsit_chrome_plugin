@@ -107,7 +107,8 @@ function do_add_single_button(l, url)
 	
     jsl.innerHTML = "<img width='16' height='16' src='" + logourl + "' title='Upload " + url + " to JSIT'/>";
 
-    l.parentNode.insertBefore(jsl, l.nextSibling);
+    //l.parentNode.insertBefore(jsl, l.nextSibling);
+    l.appendChild(jsl);
     //l.className = l.className;
     
     // See if icon is outside of visible area, move it then if it is             
