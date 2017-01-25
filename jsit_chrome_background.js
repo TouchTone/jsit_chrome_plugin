@@ -82,24 +82,32 @@ function send_form(url, formData, sendResponse)
     http.open("POST", url, true);
 
     http.onreadystatechange = function() {
-        if(http.readyState == 4) 
+        if(http.readyState === XMLHttpRequest.DONE)
         {
-            resp = http.responseXML;
-            s = resp.getElementsByTagName("status")[0].innerHTML;
-            
-            if ( s != "SUCCESS" )
+            if(http.status === 200)
             {
-                m = urldecode(resp.getElementsByTagName("message")[0].innerHTML);
-                alert("Torrent upload failed!\n"+ m);
-                sendResponse("failure");
+                resp = http.responseXML;
+                s = resp.getElementsByTagName("status")[0].innerHTML;
+                
+                if ( s != "SUCCESS" )
+                {
+                    m = urldecode(resp.getElementsByTagName("message")[0].innerHTML);
+                    alert("Torrent upload failed!\n"+ m);
+                    sendResponse("failure");
+                }
+                else
+                {
+                    sendResponse("success");          
+                }
             }
             else
             {
-                sendResponse("success");          
+                alert("Torrent upload failed!\nIssue with connection/server");
+                sendResponse("failure");
             }
         }
     };
-  
+
     http.send(formData);
 }
 
