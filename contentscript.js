@@ -40,9 +40,9 @@ function sendURL(e)
     logourl = chrome.extension.getURL("logo_16_pending.png");
     e.currentTarget.childNodes[0].src = logourl;
     
-    var l = e.currentTarget.parentNode.getElementsByTagName("a");
+    var l = e.currentTarget.parentNode;
     
-    doSendURL(e.currentTarget.childNodes[0], mapTargetURL(l[0].href));
+    doSendURL(e.currentTarget.childNodes[0], mapTargetURL(l.href));
 }
 
 function doSendURL(target, url)
